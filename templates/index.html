@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAX Checker - Проверка номеров для мессенджера MAX</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --max-blue: #0077FF;
+            --max-dark-blue: #0055CC;
+            --light-blue: #E6F0FF;
+            --dark-gray: #333333;
+            --mid-gray: #666666;
+            --light-gray: #F5F7FA;
+            --white: #FFFFFF;
+            --shadow: 0 4px 12px rgba(0, 119, 255, 0.15);
+            --radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--dark-gray);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header & Navigation */
+        header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--max-blue);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--max-blue);
+        }
+        
+        .cta-button {
+            background: var(--max-blue);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        .cta-button:hover {
+            background: var(--max-dark-blue);
+            transform: translateY(-2px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--max-blue) 0%, var(--max-dark-blue) 100%);
+            color: var(--white);
+            padding: 160px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+        
+        .hero-text {
+            flex: 1;
+        }
+        
+        .hero-visual {
+            flex: 1;
+            position: relative;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .secondary-button {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .secondary-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .counter {
+            display: flex;
+            align-items: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+        
+        .counter-number {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        
+        .counter-text {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* Section Common Styles */
+        section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        /* What is MAX Section */
+        .what-is-max {
+            background: var(--white);
+        }
+        
+        .max-info {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+        }
+        
+        .max-info-text {
+            flex: 1;
+        }
+        
+        .max-info-icons {
+            flex: 1;
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .icon-item {
+            text-align: center;
+        }
+        
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: var(--light-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+        
+        .icon-circle i {
+            font-size: 32px;
+            color: var(--max-blue);
+        }
+        
+        .icon-item h3 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .icon-item p {
+            color: var(--mid-gray);
+        }
+        
+        /* Problem Solution Section */
+        .problem-solution {
+            background: var(--light-gray);
+        }
+        
+        .ps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .problem, .solution {
+            padding: 30px;
+            border-radius: var(--radius);
+        }
+        
+        .problem {
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
+        
+        .solution {
+            background: var(--max-blue);
+            color: white;
+        }
+        
+        .ps-item h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .ps-list {
+            list-style: none;
+        }
+        
+        .ps-list li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .problem .ps-list li:before {
+            content: "❌";
+        }
+        
+        .solution .ps-list li:before {
+            content: "✅";
+        }
+        
+        /* How It Works Section */
+        .how-it-works {
+            background: var(--white);
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 30px;
+            border-radius: var(--radius);
+            background: var(--light-gray);
+            transition: transform 0.3s;
+        }
+        
+        .step:hover {
+            transform: translateY(-5px);
+        }
+        
+        .step-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .step h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        /* Benefits Section */
+        .benefits {
+            background: var(--light-gray);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .benefit {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .benefit-icon {
+            font-size: 24px;
+            color: var(--max-blue);
+            flex-shrink: 0;
+        }
+        
+        /* Pricing Section */
+        .pricing {
+            background: var(--white);
+        }
+        
+        .pricing-plans {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .plan {
+            padding: 40px 30px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .plan:hover {
+            transform: translateY(-5px);
+        }
+        
+        .plan.popular {
+            border: 2px solid var(--max-blue);
+        }
+        
+        .plan.popular:before {
+            content: "ПОПУЛЯРНЫЙ";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--max-blue);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .plan-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .plan-price {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--max-blue);
+        }
+        
+        .plan-features {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+        
+        .plan-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+        
+        /* FAQ Section */
+        .faq {
+            background: var(--light-gray);
+        }
+        
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 15px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            background: var(--white);
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s, padding 0.3s;
+            background: var(--white);
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 200px;
+        }
+        
+        /* Final CTA Section */
+        .final-cta {
+            background: linear-gradient(135deg, var(--max-blue) 0%, var(--max-dark-blue) 100%);
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+        }
+        
+        .final-cta h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .final-cta p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .big-button {
+            padding: 18px 36px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark-gray);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .footer-links h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #444;
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 992px) {
+            .hero-content {
+                flex-direction: column;
+            }
+            
+            .max-info {
+                flex-direction: column;
+            }
+            
+            .ps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .steps, .benefits-grid, .pricing-plans {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .section-title {
+                font-size: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .max-info-icons {
+                flex-direction: column;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body x-data="{ mobileMenuOpen: false, activeFAQ: null, showQuiz: false }">
+    <!-- Header & Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">MAXChecker</div>
+                <div class="nav-links">
+                    <a href="#what-is-max">О MAX</a>
+                    <a href="#how-it-works">Как работает</a>
+                    <a href="#pricing">Тарифы</a>
+                    <a href="#faq">Вопросы</a>
+                </div>
+                <button class="cta-button" @click="window.location.href='#pricing'">Проверить номера</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Узнайте, кто из ваших клиентов уже в мессенджере MAX</h1>
+                    <p>Проверяйте базы номеров телефонов и запускайте рекламу в самом перспективном российском мессенджере уже сегодня.</p>
+                    <div class="hero-buttons">
+                        <button class="cta-button big-button">Проверить номера</button>
+                        <button class="secondary-button">Подробнее</button>
+                    </div>
+                    <div class="counter">
+                        <div class="counter-number">125 847</div>
+                        <div class="counter-text">номеров проверено уже сегодня</div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjU4MCIgdmlld0JveD0iMCAwIDMwMCA1ODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHg9IjI1IiB5PSIyMCIgd2lkdGg9IjI1MCIgaGVpZ2h0PSI1NDAiIHJ4PSIyMCIgZmlsbD0iIzAwNzdGRiIgZmlsbC1vcGFjaXR5PSIwLjEiLz4KPHJlY3QgeD0iMzUiIHk9IjMwIiB3aWR0aD0iMjMwIiBoZWlnaHQ9IjUyMCIgcng9IjE1IiBmaWxsPSIjMDA1NUNDIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8cmVjdCB4PSI0NSIgeT0iNDAiIHdpZHRoPSIyMTAiIGhlaWdodD0iNTAwIiByeD0iMTAiIGZpbGw9IiMwMDc3RkYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+CjxjaXJjbGUgY3g9IjE1MCIgY3k9IjEwMCIgcj0iNDAiIGZpbGw9IiMwMDc3RkYiIGZpbGwtb3BhY2l0eT0iMC4yIi8+CjxyZWN0IHg9IjgwIiB5PSIyMDAiIHdpZHRoPSIxNDAiIGhlaWdodD0iMjAwIiByeD0iNSIgZmlsbD0iIzAwNzdGRiIgZmlsbC1vcGFjaXR5PSIwLjIiLz4KPHJlY3QgeD0iODAiIHk9IjQyMCIgd2lkdGg9IjE0MCIgaGVpZ2h0PSI0MCIgcng9IjUiIGZpbGw9IiMwMDc3RkYiIGZpbGwtb3BhY2l0eT0iMC4yIi8+Cjwvc3ZnPgo=" alt="Интерфейс мессенджера MAX" style="width: 100%; max-width: 300px; margin: 0 auto; display: block;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is MAX Section -->
+    <section id="what-is-max" class="what-is-max">
+        <div class="container">
+            <h2 class="section-title">MAX — новый мессенджер от VK с огромным потенциалом</h2>
+            <div class="max-info">
+                <div class="max-info-text">
+                    <p>Российский мессенджер, который уже скачали десятки миллионов человек. Прямая интеграция с VK Мессенджером и ОК, мощная рассылочная платформа для бизнеса и лояльная аудитория на старте.</p>
+                </div>
+                <div class="max-info-icons">
+                    <div class="icon-item">
+                        <div class="icon-circle">
+                            <span>VK</span>
+                        </div>
+                        <h3>45 млн+</h3>
+                        <p>пользователей</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">
+                            <span>OK</span>
+                        </div>
+                        <h3>30 млн+</h3>
+                        <p>пользователей</p>
+                    </div>
+                    <div class="icon-item">
+                        <div class="icon-circle">
+                            <span>↓</span>
+                        </div>
+                        <h3>10 млн+</h3>
+                        <p>скачиваний</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Solution Section -->
+    <section class="problem-solution">
+        <div class="container">
+            <div class="ps-grid">
+                <div class="problem">
+                    <h3>Вы хотите запустить рекламу в MAX, но...</h3>
+                    <ul class="ps-list">
+                        <li>Не знаете, какая часть вашей клиентской базы уже там.</li>
+                        <li>Боитесь потратить бюджет впустую на неактивную аудиторию.</li>
+                        <li>Нет времени вручную добавлять и проверять каждый номер.</li>
+                    </ul>
+                </div>
+                <div class="solution">
+                    <h3>Наше решение:</h3>
+                    <ul class="ps-list">
+                        <li><strong>Мгновенная проверка.</strong> Загрузите файл с номерами — получите результат через секунды.</li>
+                        <li><strong>Четкая статистика.</strong> Узнайте точный процент охвата вашей аудитории в MAX.</li>
+                        <li><strong>Готовый файл для рекламы.</strong> Скачайте очищенный список номеров для запуска таргетированных рассылок.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">Начать работу — проще простого</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">📤</div>
+                    <h3>Загрузите</h3>
+                    <p>Загрузите Excel или CSV файл со списком номеров телефонов (в формате +7...).</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">🔍</div>
+                    <h3>Проверьте</h3>
+                    <p>Наша система автоматически проверит каждый номер на регистрацию в MAX.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">📊</div>
+                    <h3>Получите</h3>
+                    <p>Скачайте детальный отчет с статистикой и готовый к загрузке список для рекламного кабинета.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">Почему выбирают наш сервис?</h2>
+            <div class="benefits-grid">
+                <div class="benefit">
+                    <div class="benefit-icon">⚡</div>
+                    <div>
+                        <h3>Скорость</h3>
+                        <p>Проверка тысяч номеров за считанные минуты.</p>
+                    </div>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon">🎯</div>
+                    <div>
+                        <h3>Точность</h3>
+                        <p>Высокая точность данных благодаря прямому доступу к API.</p>
+                    </div>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon">🔒</div>
+                    <div>
+                        <h3>Конфиденциальность</h3>
+                        <p>Ваши данные в безопасности. Мы не храним номера после проверки.</p>
+                    </div>
+                </div>
+                <div class="benefit">
+                    <div class="benefit-icon">💻</div>
+                    <div>
+                        <h3>Удобство</h3>
+                        <p>Простой и понятный интерфейс без сложных настроек.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing">
+        <div class="container">
+            <h2 class="section-title">Выберите подходящий тариф</h2>
+            <div class="pricing-plans">
+                <div class="plan">
+                    <div class="plan-name">Тестовый</div>
+                    <div class="plan-price">Бесплатно</div>
+                    <ul class="plan-features">
+                        <li>Проверка до 10 номеров</li>
+                        <li>Оценка качества сервиса</li>
+                        <li>Без поддержки</li>
+                    </ul>
+                    <button class="cta-button">Попробовать</button>
+                </div>
+                <div class="plan popular">
+                    <div class="plan-name">Старт</div>
+                    <div class="plan-price">490 ₽ / 1000</div>
+                    <ul class="plan-features">
+                        <li>Пакетная проверка номеров</li>
+                        <li>Выгрузка в CSV</li>
+                        <li>Поддержка по email</li>
+                    </ul>
+                    <button class="cta-button">Купить</button>
+                </div>
+                <div class="plan">
+                    <div class="plan-name">Бизнес</div>
+                    <div class="plan-price">По запросу</div>
+                    <ul class="plan-features">
+                        <li>Неограниченное количество проверок</li>
+                        <li>API-доступ</li>
+                        <li>Приоритетная поддержка</li>
+                    </ul>
+                    <button class="cta-button">Связаться</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <h2 class="section-title">Частые вопросы</h2>
+            <div class="faq-list">
+                <div class="faq-item" :class="{ active: activeFAQ === 1 }">
+                    <div class="faq-question" @click="activeFAQ = activeFAQ === 1 ? null : 1">
+                        <span>Это законно?</span>
+                        <span x-text="activeFAQ === 1 ? '−' : '+'"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Да, наш сервис работает в рамках пользовательского соглашения мессенджера MAX и проверяет только факт наличия номера в системе, не получая доступа к личным данным пользователей.</p>
+                    </div>
+                </div>
+                <div class="faq-item" :class="{ active: activeFAQ === 2 }">
+                    <div class="faq-question" @click="activeFAQ = activeFAQ === 2 ? null : 2">
+                        <span>В каком формате загружать номера?</span>
+                        <span x-text="activeFAQ === 2 ? '−' : '+'"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Номера должны быть в международном формате (+7...), по одному номеру на строку в файле CSV или XLSX.</p>
+                    </div>
+                </div>
+                <div class="faq-item" :class="{ active: activeFAQ === 3 }">
+                    <div class="faq-question" @click="activeFAQ = activeFAQ === 3 ? null : 3">
+                        <span>Как быстро происходит проверка?</span>
+                        <span x-text="activeFAQ === 3 ? '−' : '+'"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Скорость проверки составляет около 1000 номеров в минуту.</p>
+                    </div>
+                </div>
+                <div class="faq-item" :class="{ active: activeFAQ === 4 }">
+                    <div class="faq-question" @click="activeFAQ = activeFAQ === 4 ? null : 4">
+                        <span>Что происходит с моими данными после проверки?</span>
+                        <span x-text="activeFAQ === 4 ? '−' : '+'"></span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Мы удаляем ваши файлы в течение 24 часов после проверки. Ваши данные в безопасности.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA Section -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Начните первыми общаться с клиентами в MAX!</h2>
+            <p>Не упустите возможность захватить новую площадку в числе первых. Получите конкурентное преимущество и высокий отклик от рассылок.</p>
+            <button class="cta-button big-button">Начать проверку бесплатно!</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">MAXChecker</div>
+                    <p>Сервис проверки номеров для мессенджера MAX. Запускайте эффективные рекламные кампании с нашим инструментом.</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Ссылки</h3>
+                    <ul>
+                        <li><a href="#">Главная</a></li>
+                        <li><a href="#what-is-max">О MAX</a></li>
+                        <li><a href="#how-it-works">Как работает</a></li>
+                        <li><a href="#pricing">Тарифы</a></li>
+                        <li><a href="#faq">Вопросы</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Документы</h3>
+                    <ul>
+                        <li><a href="#">Пользовательское соглашение</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                        <li><a href="mailto:info@maxchecker.ru">Контакты</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2023 MAXChecker. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Quiz Modal -->
+    <template x-if="showQuiz">
+        <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+            <div style="background: white; padding: 30px; border-radius: 12px; max-width: 500px; width: 90%;">
+                <h3 style="margin-bottom: 15px;">Проверить от 10 номеров бесплатно?</h3>
+                <p style="margin-bottom: 20px;">Оставьте ваш email, и мы вышлем вам ссылку для бесплатной проверки до 10 номеров.</p>
+                <form>
+                    <input type="email" placeholder="Ваш email" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px;">
+                    <div style="display: flex; gap: 10px;">
+                        <button type="button" @click="showQuiz = false" style="padding: 12px 20px; border: 1px solid #ddd; background: #f5f5f5; border-radius: 6px; flex: 1;">Отмена</button>
+                        <button type="submit" style="padding: 12px 20px; background: #0077FF; color: white; border: none; border-radius: 6px; flex: 1;">Получить проверку</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </template>
+
+    <script>
+        // Показ модального окна через 5 секунд
+        setTimeout(() => {
+            const modalShown = localStorage.getItem('quizModalShown');
+            if (!modalShown) {
+                document.querySelector('[x-data]').__x.$data.showQuiz = true;
+                localStorage.setItem('quizModalShown', 'true');
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
